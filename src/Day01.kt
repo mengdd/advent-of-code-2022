@@ -17,7 +17,19 @@ fun main() {
     }
 
     fun part2(input: List<String>): Int {
-        return input.size
+        var groupSum = 0
+        val groupSums = mutableListOf<Int>()
+        for (line in input) {
+            if (line.isBlank() || line.isEmpty()) {
+                groupSums.add(groupSum)
+                groupSum = 0
+            } else {
+                groupSum += line.toInt()
+            }
+        }
+        groupSums.sortDescending()
+        // 195292
+        return groupSums[0] + groupSums[1] + groupSums[2]
     }
 
     val input = readInput("Day01")
