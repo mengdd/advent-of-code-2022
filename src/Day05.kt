@@ -1,23 +1,6 @@
 import java.util.*
 
-class StackInfo(val number: Int, val textIndex: Int) {
-    private val crates = Stack<Char>()
-
-    fun push(cargo: Char) {
-        crates.push(cargo)
-    }
-
-    fun pop() {
-        crates.pop()
-    }
-
-    fun peek(): Char {
-        return crates.peek()
-    }
-}
-
 class Instruction(val count: Int, val from: Int, val to: Int) {
-
     companion object {
         private val pattern = "move (\\d+) from (\\d+) to (\\d+)".toRegex()
         fun parseInstruction(text: String): Instruction {
@@ -32,14 +15,14 @@ class Instruction(val count: Int, val from: Int, val to: Int) {
 }
 
 fun main() {
-    fun buildOriginalStacks(numberLine: String, stackState: List<String>): List<StackInfo> {
-        val list = mutableListOf<StackInfo>()
+    fun buildOriginalStacks(numberLine: String, stackState: List<String>): List<Stack<Char>> {
+        val list = mutableListOf<Stack<Char>>()
         val numbers = numberLine.trim().split(" ")
         val first = numbers.first().toInt()
         val last = numbers.last().toInt()
         for (number in first..last) {
             val textIndex = numberLine.indexOf(number.toString())
-            val stackInfo = StackInfo(number = number, textIndex = textIndex)
+            val stackInfo = Stack<Char>()
             for (i in stackState.size - 1 downTo 0) {
                 val stateLine = stackState[i]
                 if (stateLine.length > textIndex) {
