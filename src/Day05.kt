@@ -44,9 +44,7 @@ fun main() {
         input.subList(numberLineIndex + 2, input.size).forEach {
             val instruction = Instruction.parseInstruction(it)
             for (i in 1..instruction.count) {
-                val toMove = stacks[instruction.from].peek()
-                stacks[instruction.to].push(toMove)
-                stacks[instruction.from].pop()
+                stacks[instruction.to].push(stacks[instruction.from].pop())
             }
         }
         val stringBuilder = StringBuilder()
@@ -54,13 +52,28 @@ fun main() {
         return stringBuilder.toString() // HNSNMTLHQ
     }
 
-    fun part2(input: List<String>): Int {
-        return input.size
+    fun part2(input: List<String>): String {
+        val numberLineIndex = input.indexOfFirst { it.trim().startsWith("1") }
+        val stacks = buildOriginalStacks(input[numberLineIndex], input.subList(0, numberLineIndex))
+
+        input.subList(numberLineIndex + 2, input.size).forEach {
+            val instruction = Instruction.parseInstruction(it)
+            val toMoveStack = Stack<Char>()
+            for (i in 1..instruction.count) {
+                toMoveStack.push(stacks[instruction.from].pop())
+            }
+            while (toMoveStack.isNotEmpty()) {
+                stacks[instruction.to].push(toMoveStack.pop())
+            }
+        }
+        val stringBuilder = StringBuilder()
+        stacks.forEach { stringBuilder.append(it.peek()) }
+        return stringBuilder.toString() // RNLFDJMCT
     }
 
     // test if implementation meets criteria from the description, like:
     val testInput = readInput("Day05_test")
-    check(part1(testInput) == "CMZ")
+    check(part2(testInput) == "MCD")
 
     val input = readInput("Day05")
     println(part1(input))
