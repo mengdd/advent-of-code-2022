@@ -93,12 +93,37 @@ fun main() {
     }
 
     fun part2(input: List<String>): Int {
-        return input.size
+        val root = Folder("/")
+        var currentDirectory = Folder("/")
+        val allFolders = mutableListOf<Folder>()
+        input.forEach {
+            if (it.startsWith("$")) {
+                // command: cd or ls
+                if (it.startsWith("$ cd")) {
+                    val command = Command.CD(path = it.split(" ").last())
+                    currentDirectory = executeCDCommand(
+                        rootDirectory = root,
+                        currentFolder = currentDirectory,
+                        command = command
+                    )
+                }
+            } else {
+                // ls result
+                handleListResult(directory = currentDirectory, line = it, allFolders = allFolders)
+            }
+        }
+
+        val totalUsed = root.size
+        val unused = 70000000 - totalUsed
+        allFolders.sortBy { it.size }
+        val stillNeedSpace = 30000000 - unused
+        val toDelete = allFolders.first { it.size > stillNeedSpace }
+        return toDelete.size
     }
 
     // test if implementation meets criteria from the description, like:
     val testInput = readInput("Day07_test")
-    check(part1(testInput) == 95437)
+    check(part2(testInput) == 24933642)
 
     val input = readInput("Day07")
     println(part1(input))
