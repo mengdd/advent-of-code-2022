@@ -52,7 +52,7 @@ fun main() {
         return node
     }
 
-    fun handleListResult(directory: Folder, line: String, allFolders: MutableSet<Folder>) {
+    fun handleListResult(directory: Folder, line: String, allFolders: MutableList<Folder>) {
         val result = line.split(" ")
         val node: Node = if (result[0] == "dir") {
             Folder(name = result[1], parent = directory)
@@ -68,7 +68,7 @@ fun main() {
     fun part1(input: List<String>): Int {
         val root = Folder("/")
         var currentDirectory = Folder("/")
-        val allFolders = mutableSetOf<Folder>()
+        val allFolders = mutableListOf<Folder>()
         input.forEach {
             if (it.startsWith("$")) {
                 // command: cd or ls
@@ -88,6 +88,7 @@ fun main() {
 
         // 48044502, too high
         // 1181394 too low
+        // 1449447 correct
         return allFolders.filter { it.isValidFolder }.sumOf { it.size }
     }
 
