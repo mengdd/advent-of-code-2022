@@ -22,6 +22,13 @@ class Folder(
     val files = mutableSetOf<Node>()
     override val size: Int
         get() = files.sumOf { it.size }
+
+    val isValidFolder
+        get() = size <= MAX_SIZE
+
+    companion object {
+        private const val MAX_SIZE = 100000
+    }
 }
 
 sealed class Command {
@@ -30,6 +37,7 @@ sealed class Command {
 }
 
 fun main() {
+
     fun executeCDCommand(rootDirectory: Folder, currentFolder: Folder, command: Command.CD): Folder {
         if (command.path == "..") {
             return currentFolder.parent ?: currentFolder
@@ -44,7 +52,7 @@ fun main() {
         return node
     }
 
-    fun handleListResult(directory: Folder, line: String) {
+    fun handleListResult(directory: Folder, line: String, allFolders: MutableSet<Folder>) {
         val result = line.split(" ")
         val node: Node = if (result[0] == "dir") {
             Folder(name = result[1], parent = directory)
@@ -52,12 +60,15 @@ fun main() {
             Node(name = result[1], size = result[0].toInt())
         }
         directory.files.add(node)
+        if (node is Folder) {
+            allFolders.add(node)
+        }
     }
 
     fun part1(input: List<String>): Int {
         val root = Folder("/")
         var currentDirectory = Folder("/")
-
+        val allFolders = mutableSetOf<Folder>()
         input.forEach {
             if (it.startsWith("$")) {
                 // command: cd or ls
@@ -71,12 +82,13 @@ fun main() {
                 }
             } else {
                 // ls result
-                handleListResult(currentDirectory, it)
+                handleListResult(directory = currentDirectory, line = it, allFolders = allFolders)
             }
         }
 
         // 48044502, too high
-        return root.size
+        // 1181394 too low
+        return allFolders.filter { it.isValidFolder }.sumOf { it.size }
     }
 
     fun part2(input: List<String>): Int {
@@ -85,7 +97,7 @@ fun main() {
 
     // test if implementation meets criteria from the description, like:
     val testInput = readInput("Day07_test")
-    check(part1(testInput) == 48381165)
+    check(part1(testInput) == 95437)
 
     val input = readInput("Day07")
     println(part1(input))
