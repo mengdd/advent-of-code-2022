@@ -1,27 +1,31 @@
 fun main() {
-    fun part1(input: List<String>): Int {
-        assert(input.size == 1)
-
-        val line = input[0]
+    fun findMarkerIndex(line: String, markerLength: Int): Int {
         var index = -1
-        for (i in 4..line.length) {
-            val substring = line.substring(i - 4, i)
+        for (i in markerLength..line.length) {
+            val substring = line.substring(i - markerLength, i)
             if (substring.toSet().size == substring.length) {
                 index = i
                 break
             }
         }
-        // 1804
         return index
     }
 
+    fun part1(input: List<String>): Int {
+        assert(input.size == 1)
+        // 1804
+        return findMarkerIndex(input[0], 4)
+    }
+
     fun part2(input: List<String>): Int {
-        return input.size
+        assert(input.size == 1)
+        // 2508
+        return findMarkerIndex(input[0], 14)
     }
 
     // test if implementation meets criteria from the description, like:
     val testInput = readInput("Day06_test")
-    check(part1(testInput) == 10)
+    check(part2(testInput) == 29)
 
     val input = readInput("Day06")
     println(part1(input))
