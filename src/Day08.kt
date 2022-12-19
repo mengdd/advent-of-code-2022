@@ -32,9 +32,7 @@ fun main() {
     }
 
     fun isVisible(
-        treeHeightMap: Array<IntArray>,
-        row: Int,
-        column: Int
+        treeHeightMap: Array<IntArray>, row: Int, column: Int
     ): Int {
 
         if (row == 0 || row == treeHeightMap.size - 1 || column == 0 || column == treeHeightMap[0].size - 1) {
@@ -65,12 +63,14 @@ fun main() {
         if (row < 1) {
             return 0
         }
-        var height = treeHeightMap[row - 1][column]
-        var count = 1
-        for (i in row - 2 downTo 0) {
-            if (treeHeightMap[i][column] >= height) {
-                height = treeHeightMap[i][column]
+        val height = treeHeightMap[row][column]
+        var count = 0
+        for (i in row - 1 downTo 0) {
+            if (treeHeightMap[i][column] < height) {
                 count++
+            } else {
+                count++
+                break
             }
         }
         return count
@@ -80,12 +80,14 @@ fun main() {
         if (row >= treeHeightMap.size - 1) {
             return 0
         }
-        var height = treeHeightMap[row + 1][column]
-        var count = 1
-        for (i in row + 2 until treeHeightMap.size) {
-            if (treeHeightMap[i][column] >= height) {
-                height = treeHeightMap[i][column]
+        val height = treeHeightMap[row][column]
+        var count = 0
+        for (i in row + 1 until treeHeightMap.size) {
+            if (treeHeightMap[i][column] < height) {
                 count++
+            } else {
+                count++
+                break
             }
         }
         return count
@@ -95,12 +97,14 @@ fun main() {
         if (column >= treeHeightMap[0].size - 1) {
             return 0
         }
-        var height = treeHeightMap[row][column + 1]
-        var count = 1
-        for (i in column + 2 until treeHeightMap[0].size) {
-            if (treeHeightMap[row][i] >= height) {
-                height = treeHeightMap[row][i]
+        val height = treeHeightMap[row][column]
+        var count = 0
+        for (i in column + 1 until treeHeightMap[0].size) {
+            if (treeHeightMap[row][i] < height) {
                 count++
+            } else {
+                count++
+                break
             }
         }
         return count
@@ -110,27 +114,27 @@ fun main() {
         if (column < 1) {
             return 0
         }
-        var height = treeHeightMap[row][column - 1]
-        var count = 1
-        for (i in column - 2 downTo 0) {
-            if (treeHeightMap[row][i] >= height) {
-                height = treeHeightMap[row][i]
+        val height = treeHeightMap[row][column]
+        var count = 0
+        for (i in column - 1 downTo 0) {
+            if (treeHeightMap[row][i] < height) {
                 count++
+            } else {
+                count++
+                break
             }
         }
         return count
     }
 
     fun getScenicScore(
-        treeHeightMap: Array<IntArray>,
-        row: Int,
-        column: Int
+        treeHeightMap: Array<IntArray>, row: Int, column: Int
     ): Int {
         val topCount = findTopCount(treeHeightMap, row, column)
         val rightCount = findRightCount(treeHeightMap, row, column)
         val bottomCount = findBottomCount(treeHeightMap, row, column)
         val leftCount = findLeftCount(treeHeightMap, row, column)
-
+        
         return topCount * rightCount * bottomCount * leftCount
     }
 
@@ -165,12 +169,13 @@ fun main() {
         }
 
         // 20592 too low
+        // 263670
         return scoreMap.maxOf { it.max() }
     }
 
     // test if implementation meets criteria from the description, like:
     val testInput = readInput("Day08_test")
-    check(part2(testInput) == 12)
+    check(part2(testInput) == 8)
 
     val input = readInput("Day08")
     println(part1(input))
