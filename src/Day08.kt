@@ -63,7 +63,7 @@ fun main() {
 
     fun findTopCount(treeHeightMap: Array<IntArray>, row: Int, column: Int): Int {
         if (row < 1) {
-            return 1
+            return 0
         }
         var height = treeHeightMap[row - 1][column]
         var count = 1
@@ -78,7 +78,7 @@ fun main() {
 
     fun findBottomCount(treeHeightMap: Array<IntArray>, row: Int, column: Int): Int {
         if (row >= treeHeightMap.size - 1) {
-            return 1
+            return 0
         }
         var height = treeHeightMap[row + 1][column]
         var count = 1
@@ -93,7 +93,7 @@ fun main() {
 
     fun findRightCount(treeHeightMap: Array<IntArray>, row: Int, column: Int): Int {
         if (column >= treeHeightMap[0].size - 1) {
-            return 1
+            return 0
         }
         var height = treeHeightMap[row][column + 1]
         var count = 1
@@ -108,7 +108,7 @@ fun main() {
 
     fun findLeftCount(treeHeightMap: Array<IntArray>, row: Int, column: Int): Int {
         if (column < 1) {
-            return 1
+            return 0
         }
         var height = treeHeightMap[row][column - 1]
         var count = 1
