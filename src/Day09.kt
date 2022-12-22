@@ -102,12 +102,30 @@ fun main() {
     }
 
     fun part2(input: List<String>): Int {
-        return input.size
+        val visited = mutableSetOf<Position>()
+
+        val tails = mutableListOf<Position>()
+        repeat(10) {
+            tails.add(Position(0, 0))
+        }
+        input.forEach {
+            val command = it.split(" ")
+            repeat(command[1].toInt()) {
+                tails[0] = moveHead(startPosition = tails[0], direction = command[0])
+                for (i in 1..9) {
+                    tails[i] = moveTail(headPosition = tails[i - 1], tailPosition = tails[i])
+                }
+                visited.add(tails[9])
+            }
+        }
+
+        // 2619
+        return visited.size
     }
 
     // test if implementation meets criteria from the description, like:
     val testInput = readInput("Day09_test")
-    check(part1(testInput) == 13)
+    check(part2(testInput) == 36)
 
     val input = readInput("Day09")
     println(part1(input))
